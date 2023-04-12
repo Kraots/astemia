@@ -1,0 +1,9 @@
+*.pyc
+bot.py
+.env
+*.png
+venv
+*.log
+nohup.out
+*.jar
+Lavalink
