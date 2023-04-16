@@ -76,16 +76,10 @@ class Marriages(commands.Cog):
 
             data1.married_to = member.id
             data1.married_since = now
-            for adoption in data2.adoptions:
-                if adoption not in data1.adoptions:
-                    data1.adoptions.append(adoption)
             await data1.commit()
 
             data2.married_to = ctx.author.id
             data2.married_since = now
-            for adoption in data1.adoptions:
-                if adoption not in data2.adoptions:
-                    data2.adoptions.append(adoption)
             await data2.commit()
 
             await ctx.send(f'`{ctx.author.display_name}` married `{member.display_name}`!!! :heart: :tada: :tada:')
@@ -143,7 +137,7 @@ class Marriages(commands.Cog):
             return await fn(i)
 
         mem = ctx.ukiyo.get_member(data.married_to)
-        em = disnake.Embed(title=f'Married to `{mem.display_name}`', colour=utils.blurple)
+        em = disnake.Embed(title=f'Married to `{mem.display_name}`', colour=utils.red)
         if member == ctx.author:
             i = 'You\'re married to'
             fn = ctx.reply
@@ -163,11 +157,6 @@ class Marriages(commands.Cog):
 
         await self.bot.db.delete('marriage', {'_id': member.id})
         await self.bot.db.delete('marriage', {'married_to': member.id})
-
-        for entry in await self.bot.db.find('marriage'):
-            if member.id in entry.adoptions:
-                entry.adoptions.remove(member.id)
-                await entry.commit()
 
 
 def setup(bot: Ukiyo):
