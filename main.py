@@ -14,7 +14,6 @@ import utils
 from utils.views.help_command import PaginatedHelpCommand
 
 TOKEN = os.getenv('BOT_TOKEN')
-TO_REPLACE = os.getenv('NAMETOREPLACE')
 
 
 class Astemia(commands.Bot):
@@ -30,7 +29,7 @@ class Astemia(commands.Bot):
                 roles=False, everyone=False, users=True
             ),
             test_guilds=[1095130822610268180]
-        ) 
+        )
 
         self._owner_id = 745298049567424623
 
@@ -40,6 +39,8 @@ class Astemia(commands.Bot):
         r = Repo('.')
         self.git_hash = r.head().decode('utf-8')
         r.close()
+
+        self.webhooks = {}
 
         self.db: utils.databases.Database = utils.databases.Database()
 
@@ -82,12 +83,46 @@ class Astemia(commands.Bot):
             self.add_view(utils.AgeButtonRoles(), message_id=1095657274292310056)
             self.added_views = True
 
+        if len(self.webhooks) == 0:
+            av = self.user.display_avatar
+            logs = await self.get_webhook(
+                self.get_channel(1097258021031256074),
+                avatar=av
+            )
+            message_logs = await self.get_webhook(
+                self.get_channel(1097258442818859078),
+                avatar=av
+            )
+            self.webhooks['logs'] = logs
+            self.webhooks['message_logs'] = message_logs
+
     async def process_commands(self, message):
         ctx = await self.get_context(message)
         await self.invoke(ctx)
 
     async def get_context(self, message, *, cls=utils.Context):
         return await super().get_context(message, cls=cls)
+
+    async def get_webhook(
+        self,
+        channel: disnake.TextChannel,
+        *,
+        name: str = "astemia",
+        avatar: disnake.Asset = None,
+    ) -> disnake.Webhook:
+        """Returns the general bot hook or creates one."""
+
+        webhooks = await channel.webhooks()
+        webhook = disnake.utils.find(lambda w: w.name and w.name.lower() == name.lower(), webhooks)
+
+        if webhook is None:
+            webhook = await channel.create_webhook(
+                name=name,
+                avatar=await avatar.read() if avatar else None,
+                reason="Used ``get_webhook`` but webhook didn't exist",
+            )
+
+        return webhook
 
 
 Astemia().run(TOKEN)
