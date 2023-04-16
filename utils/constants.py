@@ -63,7 +63,11 @@ class Categories(NamedTuple):
     ...
 
 class StaffRoles(NamedTuple):
-    ...
+    owner = 1095134797245989006
+    admin = 1097240367767752745
+    moderator = 1097240407869501500
+
+    all = (owner, admin, moderator)
 
 class ExtraRoles(NamedTuple):
     ...

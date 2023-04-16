@@ -33,9 +33,6 @@ class Github(commands.Cog):
         **NOTE:** This command can only be used in <#1078234687153131554>
         """
 
-        if await ctx.check_channel() is False:
-            return
-
         src = utils.GithubSource(self.bot.user.display_avatar)
         if command is not None:
             if command.lower() == 'help':
@@ -55,9 +52,6 @@ class Github(commands.Cog):
         **NOTE:** This command can only be used in <#1078234687153131554>
         """
 
-        if await ctx.check_channel() is False:
-            return
-
         em = await self.github_client.get_user_info(username)
         await ctx.better_reply(embed=em)
 
@@ -67,9 +61,6 @@ class Github(commands.Cog):
         `repo` **->** The repo to search for.
         **NOTE:** This command can only be used in <#1078234687153131554>
         """
-
-        if await ctx.check_channel() is False:
-            return
 
         em = await self.github_client.get_repo_info(repo)
         await ctx.better_reply(embed=em)
