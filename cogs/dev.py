@@ -14,8 +14,6 @@ from utils import Context, TextPage, clean_code  #, Constants (the database)
 
 from main import Astemia
 
-TO_REPLACE = os.getenv('NAMETOREPLACE')
-
 
 class Developer(commands.Cog):
     """Dev only commands."""
@@ -72,7 +70,7 @@ class Developer(commands.Cog):
                 obj = await local_variables["func"]()
                 result = f"{stdout.getvalue()}\n-- {obj}\n"
         except Exception as e:
-            result = ("".join(format_exception(e, e, e.__traceback__))).replace(TO_REPLACE, "Kraots")
+            result = ("".join(format_exception(e, e, e.__traceback__)))
 
         end = time.perf_counter()
         took = f"{end-start:.3f}"
