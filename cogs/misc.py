@@ -25,7 +25,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#1078234687153131554>
         """
 
-        ping = disnake.Embed(title="Pong!", description="_Pinging..._", color=utils.blurple)
+        ping = disnake.Embed(title="Pong!", description="_Pinging..._", color=utils.red)
         start = time.time() * 1000
         msg = await ctx.better_reply(embed=ping)
         end = time.time() * 1000
@@ -34,7 +34,7 @@ class Misc(commands.Cog):
             description=f"Websocket Latency: `{(round(self.bot.latency * 1000, 2))}ms`"
             f"\nBot Latency: `{int(round(end-start, 0))}ms`"
             f"\nResponse Time: `{(msg.created_at - ctx.message.created_at).total_seconds()/1000}` ms",
-            color=utils.blurple
+            color=utils.red
         )
         ping.set_footer(text=f"Online for {utils.human_timedelta(dt=self.bot.uptime, suffix=False)}")
         await msg.edit(embed=ping)
@@ -48,7 +48,7 @@ class Misc(commands.Cog):
         uptime = disnake.Embed(
             description=f"Bot has been online since {utils.format_dt(self.bot.uptime, 'F')} "
                         f"(`{utils.human_timedelta(dt=self.bot.uptime, suffix=False)}`)",
-            color=utils.blurple
+            color=utils.red
         )
         uptime.set_footer(text=f'Bot made by: {self.bot._owner}')
         await ctx.better_reply(embed=uptime)
