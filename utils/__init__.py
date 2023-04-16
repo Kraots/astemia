@@ -7,3 +7,6 @@ from .paginator import *
 from .views import *
 from .github import *
 from .decorators import *
+from .regex import *
+from .formats import *
+from .time import *
