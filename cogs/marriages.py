@@ -32,7 +32,7 @@ class Marriages(commands.Cog):
 
         data1: Marriage = await self.bot.db.get('marriage', ctx.author.id)
         if data1 and data1.married_to != 0:
-            mem = ctx.ukiyo.get_member(data1.married_to)
+            mem = ctx.astemia.get_member(data1.married_to)
             return await ctx.reply(f'{ctx.denial} You are already married to {mem.mention}')
         elif data1 and member.id in data1.adoptions:
             return await ctx.reply(
@@ -41,7 +41,7 @@ class Marriages(commands.Cog):
 
         data2: Marriage = await self.bot.db.get('marriage', member.id)
         if data2 and data2.married_to != 0:
-            mem = ctx.ukiyo.get_member(data2.married_to)
+            mem = ctx.astemia.get_member(data2.married_to)
             return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already married to {mem.mention}')
         elif data2 and ctx.author.id in data2.adoptions:
             return await ctx.reply(
@@ -100,7 +100,7 @@ class Marriages(commands.Cog):
             return await ctx.reply(f'{ctx.denial} You are not married to anyone.')
 
         else:
-            usr = ctx.ukiyo.get_member(data.married_to)
+            usr = ctx.astemia.get_member(data.married_to)
 
             view = utils.ConfirmView(ctx, f'{ctx.author.mention} Did not react in time.')
             view.message = msg = await ctx.reply(f'Are you sure you want to divorce {usr.mention}?', view=view)
@@ -136,7 +136,7 @@ class Marriages(commands.Cog):
                 fn = ctx.better_reply
             return await fn(i)
 
-        mem = ctx.ukiyo.get_member(data.married_to)
+        mem = ctx.astemia.get_member(data.married_to)
         em = disnake.Embed(title=f'Married to `{mem.display_name}`', colour=utils.red)
         if member == ctx.author:
             i = 'You\'re married to'
