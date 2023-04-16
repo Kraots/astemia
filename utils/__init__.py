@@ -6,3 +6,4 @@ from .helpers import *
 from .paginator import *
 from .views import *
 from .github import *
+from .decorators import *
