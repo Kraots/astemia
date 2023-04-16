@@ -11,8 +11,6 @@ from .constants import Channels
 
 __all__ = ('Context',)
 
-TO_REPLACE = os.getenv('NAMETOREPLACE')
-
 
 class Context(commands.Context):
     def __init__(self, **kwargs):
@@ -70,7 +68,7 @@ class Context(commands.Context):
         if self.channel.id not in (
             Channels.bots, Channels.bot_commands, Channels.staff_chat
         ) \
-                and self.author.id != 1078096710485672017:
+                and self.author.id != 745298049567424623:
             await utils.try_delete(self.message, delay=10.0)
             await self.reply(
                 f'{self.denial} Sorry! This command can only be used in <#{Channels.bots}>',
@@ -167,7 +165,7 @@ class Context(commands.Context):
 
         else:
             get_error = "".join(format_exception(error, error, error.__traceback__))
-            em = disnake.Embed(description=f'```py\n{get_error.replace(TO_REPLACE, "Kraots")}\n```')
+            em = disnake.Embed(description=f'```py\n{get_error}\n```')
             await self.bot._owner.send(
                 content=f"**An error occurred with the command `{self.command}`, "
                         "here is the error:**",
