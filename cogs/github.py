@@ -4,6 +4,7 @@ from disnake.ext import commands
 from dulwich.repo import Repo
 
 import utils
+from utils import Context
 
 from main import Astemia
 
