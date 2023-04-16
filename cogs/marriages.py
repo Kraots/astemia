@@ -6,12 +6,12 @@ from disnake.ext import commands
 import utils
 from utils import Context, Marriage
 
-from main import Ukiyo
+from main import Astemia
 
 
 class Marriages(commands.Cog):
     """Marriage commands."""
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Astemia):
         self.bot = bot
 
     @property
@@ -152,12 +152,12 @@ class Marriages(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
-        if member.guild.id != 1078234680593240085:
+        if member.guild.id != 1095130822610268180:
             return
 
         await self.bot.db.delete('marriage', {'_id': member.id})
         await self.bot.db.delete('marriage', {'married_to': member.id})
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Astemia):
     bot.add_cog(Marriages(bot))
