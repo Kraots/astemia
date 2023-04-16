@@ -6,6 +6,8 @@ from dulwich.repo import Repo
 import utils
 from utils import Context
 
+from jishaku.shell import ShellReader
+
 from main import Astemia
 
 
@@ -30,7 +32,6 @@ class Github(commands.Cog):
     async def github_source(self, ctx: Context, *, command: str = None):
         """Get the source on github for a command the bot has.
         `command` **->** The command you want to see. Can either be a prefixed command or a slash command.
-        **NOTE:** This command can only be used in <#1078234687153131554>
         """
 
         src = utils.GithubSource(self.bot.user.display_avatar)
@@ -49,7 +50,6 @@ class Github(commands.Cog):
     async def github_user(self, ctx: Context, *, username: str):
         """Search for a github user's account via its username.
         `username` **->** The user's github name.
-        **NOTE:** This command can only be used in <#1078234687153131554>
         """
 
         em = await self.github_client.get_user_info(username)
@@ -59,7 +59,6 @@ class Github(commands.Cog):
     async def github_repo(self, ctx: Context, *, repo: str):
         """Search for a github repository via the following format: `RepoOwnerUsername/RepoName`
         `repo` **->** The repo to search for.
-        **NOTE:** This command can only be used in <#1078234687153131554>
         """
 
         em = await self.github_client.get_repo_info(repo)

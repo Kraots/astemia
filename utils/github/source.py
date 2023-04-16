@@ -28,7 +28,7 @@ class ReturnData:
 class GithubSource:
     """Displays information about the bot's source code."""
 
-    BOT_REPO_URL = 'https://github.com/Kraots/ukiyo'
+    BOT_REPO_URL = 'https://github.com/Kraots/astemia'
 
     def __init__(
         self, bot_avatar: str, max_lines: int = 20

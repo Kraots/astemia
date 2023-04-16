@@ -45,7 +45,7 @@ class GithubClient:
     async def github_request(self, method, url, *, params=None, data=None, headers=None) -> dict | str:
         hdrs = {
             'Accept': 'application/vnd.github.inertia-preview+json',
-            'User-Agent': 'Ukiyo',
+            'User-Agent': 'Astemia',
             'Authorization': f'token {os.getenv("GITHUB_TOKEN")}'
         }
 
