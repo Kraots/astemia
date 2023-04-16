@@ -41,6 +41,8 @@ class Astemia(commands.Bot):
         self.git_hash = r.head().decode('utf-8')
         r.close()
 
+        self.db: utils.databases.Database = utils.databases.Database()
+
         self.load_extension('jishaku')
         os.environ['JISHAKU_NO_DM_TRACEBACK'] = '1'
         os.environ['JISHAKU_FORCE_PAGINATOR'] = '1'
