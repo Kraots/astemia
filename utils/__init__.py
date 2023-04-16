@@ -10,3 +10,4 @@ from .decorators import *
 from .regex import *
 from .formats import *
 from .time import *
+from .fuzzy import *
