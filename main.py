@@ -37,9 +37,9 @@ class Astemia(commands.Bot):
         self.added_views = False
 
         self.execs = {}
-#        r = Repo('.')
- #       self.git_hash = r.head().decode('utf-8')
-  #      r.close()
+        r = Repo('.')
+        self.git_hash = r.head().decode('utf-8')
+        r.close()
 
         self.load_extension('jishaku')
         os.environ['JISHAKU_NO_DM_TRACEBACK'] = '1'
