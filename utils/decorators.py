@@ -12,11 +12,11 @@ __all__ = (
 
 def _is_owner(ctx: Context, *, owner_only: bool = False):
     if owner_only is True:
-        if ctx.author.id == 1078096710485672017:
+        if ctx.author.id == 745298049567424623:
             return True
         raise commands.NotOwner
 
-    if ctx.author.id == 1078096710485672017:
+    if ctx.author.id == 745298049567424623:
         return True
     elif StaffRoles.owner in (role.id for role in ctx.author.roles):
         return True
