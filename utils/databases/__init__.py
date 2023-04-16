@@ -17,11 +17,11 @@ from .dbs import (  # noqa
 
 class GetDoc:
     @classmethod
-    async def get(cls, id=1078096710485672017):
+    async def get(cls, id=745298049567424623):
         """|coro|
 
         This method is a shortcut for ``await .find_one({'_id': id})``
-        If the ``id`` isn't given, then it will use the owner's id by default (1078096710485672017)
+        If the ``id`` isn't given, then it will use the owner's id by default (745298049567424623)
         """
 
         return await cls.find_one({'_id': id})
