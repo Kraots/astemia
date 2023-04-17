@@ -238,7 +238,7 @@ class FieldPageSource(menus.ListPageSource):
 
     def __init__(self, entries, *, per_page=12):
         super().__init__(entries, per_page=per_page)
-        self.embed = disnake.Embed(colour=disnake.Colour.red())
+        self.embed = disnake.Embed(colour=disnake.Colour.blurple())
 
     async def format_page(self, menu, entries):
         self.embed.clear_fields()
@@ -326,6 +326,7 @@ class SimplePageSource(menus.ListPageSource):
 
 class SimplePages(RoboPages):
     """A simple pagination session reminiscent of the old Pages interface.
+
     Basically an embed with some normal formatting.
     """
 
@@ -341,7 +342,7 @@ class SimplePages(RoboPages):
             ctx=ctx, compact=compact
         )
         if color is None:
-            color = disnake.Color.red()
+            color = disnake.Color.blurple()
         self.embed = disnake.Embed(colour=color)
 
 
@@ -370,7 +371,7 @@ class RawSimplePages(RoboPages):
     def __init__(self, ctx, entries, *, per_page=5, color=None, compact=False):
         super().__init__(RawSimplePageSource(entries, per_page=per_page), ctx=ctx, compact=compact)
         if color is None:
-            color = disnake.Color.red()
+            color = disnake.Color.blurple()
         self.embed = disnake.Embed(colour=color)
 
 

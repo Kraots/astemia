@@ -12,7 +12,7 @@ from disnake.ext import commands
 import utils
 
 if TYPE_CHECKING:
-    from main import Ukiyo
+    from main import Astemia
 
 __all__ = ('GistContent', 'GithubClient',)
 
@@ -38,7 +38,7 @@ class GistContent:
 
 
 class GithubClient:
-    def __init__(self, bot: Ukiyo) -> None:
+    def __init__(self, bot: Astemia) -> None:
         self.bot = bot
         self.lock = asyncio.Lock()
 

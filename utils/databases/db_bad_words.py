@@ -9,7 +9,7 @@ instance = Instance(database8)
 
 @instance.register
 class BadWords(Document, GetDoc):
-    id = IntField(attribute='_id', default=1078096710485672017)
+    id = IntField(attribute='_id', default=745298049567424623)
     bad_words = DictField(StrField(), IntField(), default={})
 
     class Meta:

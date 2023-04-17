@@ -174,4 +174,3 @@ def find(text, collection, *, key=None):
         return finder(text, collection, key=key, lazy=False)[0]
     except IndexError:
         return None
-

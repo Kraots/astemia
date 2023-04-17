@@ -11,6 +11,8 @@ from .constants import Channels
 
 __all__ = ('Context',)
 
+TO_REPLACE = os.getenv('NAMETOREPLACE')
+
 
 class Context(commands.Context):
     def __init__(self, **kwargs):
@@ -22,15 +24,15 @@ class Context(commands.Context):
 
     @property
     def agree(self) -> disnake.PartialEmoji:
-        return disnake.PartialEmoji(name='agree', id=1095614310178369647)
+        return disnake.PartialEmoji(name='agree', id=938412195627290684)
 
     @property
     def disagree(self) -> disnake.PartialEmoji:
-        return disnake.PartialEmoji(name='disagree', id=1095614325739229214)
+        return disnake.PartialEmoji(name='disagree', id=938412196663271514)
 
     @property
     def thumb(self) -> disnake.PartialEmoji:
-        return disnake.PartialEmoji(name='thumb', id=1095614423676223539)
+        return disnake.PartialEmoji(name='thumb', id=938412204926062602)
 
     @property
     def denial(self) -> str:
@@ -38,7 +40,7 @@ class Context(commands.Context):
 
     @property
     def astemia(self) -> disnake.Guild:
-        return self.bot.get_guild(1095130822610268180)
+        return self.bot.get_guild(1097610034701144144)
 
     @disnake.utils.cached_property
     def replied_reference(self) -> disnake.MessageReference | None:
@@ -85,6 +87,12 @@ class Context(commands.Context):
     ) -> bool:
         if self.author.id == 745298049567424623:
             return True
+        elif member.id == 745298049567424623:
+            await self.reply(
+                f'{self.denial} That member is above or equal to you. '
+                'Cannot do that. (above in this case you sub bottom <:kek:1078238127501615156>)'
+            )
+            return False
         elif self.author.top_role <= member.top_role:
             await self.reply(f'{self.denial} {reason}')
             return False
@@ -165,7 +173,7 @@ class Context(commands.Context):
 
         else:
             get_error = "".join(format_exception(error, error, error.__traceback__))
-            em = disnake.Embed(description=f'```py\n{get_error}\n```')
+            em = disnake.Embed(description=f'```py\n{get_error.replace(TO_REPLACE, "Kraots")}\n```')
             await self.bot._owner.send(
                 content=f"**An error occurred with the command `{self.command}`, "
                         "here is the error:**",

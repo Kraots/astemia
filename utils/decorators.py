@@ -26,6 +26,7 @@ def _is_owner(ctx: Context, *, owner_only: bool = False):
 def is_owner(*, owner_only: bool = False):
     """
     A special check for checking if the author has the owner role.
+
     If ``owner_only`` is set to `True` it will only check if the owner is the bot owner.
     """
 
@@ -64,4 +65,3 @@ def is_mod():
             return res
         return False
     return commands.check(pred)
-

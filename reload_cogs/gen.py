@@ -6,7 +6,7 @@ from disnake.ext import commands
 import utils
 from utils.context import Context
 
-from main import Astemia 
+from main import Astemia
 
 
 class Cogs(commands.Cog):

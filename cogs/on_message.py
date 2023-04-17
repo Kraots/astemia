@@ -1,5 +1,8 @@
+import re
+import math
 import asyncio
 import datetime
+import simpleeval
 
 import disnake
 from disnake.ext import commands
@@ -7,6 +10,20 @@ from disnake.ext import commands
 import utils
 
 from main import Astemia
+
+functions = {
+    'sqrt': lambda x: math.sqrt(x),
+    'sin': lambda x: math.sin(x),
+    'cos': lambda x: math.cos(x),
+    'tan': lambda x: math.tan(x),
+    'ceil': lambda x: math.ceil(x),
+    'floor': lambda x: math.floor(x),
+    'sinh': lambda x: math.sinh(x),
+    'cosh': lambda x: math.cosh(x),
+    'tanh': lambda x: math.tanh(x),
+    'abs': lambda x: math.fabs(x),
+    'log': lambda x: math.log(x)
+}
 
 
 class OnMessage(commands.Cog):
@@ -106,15 +123,19 @@ class OnMessage(commands.Cog):
     async def check_usernames_and_tokens(self, message: disnake.Message):
         await self.check_tokens(message)
 
+        if message.guild and message.guild.id == 1097610034701144144 and not message.author.bot:
+            if message.author.id != self.bot._owner_id and message.content != '':
+                await utils.check_username(self.bot, message.author, bad_words=self.bot.bad_words.keys())
+
     @commands.Cog.listener('on_message_edit')
     async def repeat_command(self, before: disnake.Message, after: disnake.Message):
         if not after.content:
             return
-        elif after.content[0] not in ('!', '?', '.'):
+        elif after.content[0] not in ('!', '?'):
             return
 
         ctx = await self.bot.get_context(after)
-        cmd = self.bot.get_command(after.content.replace('!', '').replace('?', '').replace('.', ''))
+        cmd = self.bot.get_command(after.content.replace('!', '').replace('?', ''))
         if cmd is None:
             return
 
@@ -138,6 +159,88 @@ class OnMessage(commands.Cog):
                 await cmd.invoke(ctx)
             return
         await cmd.invoke(ctx)
+
+    @commands.Cog.listener('on_message')
+    async def check_for_calc_expression(self, message: disnake.Message):
+        if self.bot.calc_ternary is True:
+            return
+        operators = r'\+\-\/\*\(\)\^\÷\%\×\.'
+        _content = message.content
+
+        if utils.URL_REGEX.findall(_content):
+            return
+        if not any(m in _content for m in operators):
+            return
+        if message.author.bot:
+            return
+
+        for key, value in {
+            '^': '**',
+            '÷': '/',
+            ' ': '',
+            '×': '*',
+        }.items():
+            _content = _content.replace(key, value)
+
+        try:
+            # Syntax:
+            # 1. See if at least one function or one statement (E.g 1+2) exists, else return
+            # 2. Parentheses multiplication is a valid syntax in math, so substitute `<digit*>"("` with `<digit*>"*("`
+            # 3. It is possible that the first character in the equation is either "-", "+", or "(", so include it
+            # 4. Functions is implemented here, so with functions the syntax would be `[<func>"("<expr*>")"]`
+            # 5. Multiple parent/operators also possible, so we do `<digit*>[operators*][digit*]`, operators as wildcard
+            # 6. Get the first match of all possible equations
+            regex = re.compile(rf"(\d+|{'|'.join(list(functions.keys()))})[{operators}]+\d+")
+            match = re.search(regex, _content)
+            if not match:
+                return
+
+            def parse(_match):
+                return _match.group().replace("(", "*(")
+
+            _content = re.sub(re.compile(r"\d\("), parse, _content)
+            funcs = "|".join(list(functions.keys()))
+            regex = re.compile(
+                rf"((([{operators}]+)?({funcs})?([{operators}]+)?(\d+[{operators}]+)*(\d+)([{operators}]+)?)+)"
+            )
+            match = re.findall(regex, _content)
+            content = match[0][0]
+            if not any(m in content for m in operators) or not content:
+                return
+
+        except AttributeError:
+            return
+
+        em = disnake.Embed(color=utils.blurple)
+        em.add_field(
+            name='I detected an expression in your message!',
+            value=f'```yaml\n"{content}"\n```',
+            inline=False
+        )
+        em.set_footer(text='To disable this ask one of the owners to use "!calculator toggle"')
+
+        try:
+            result = simpleeval.simple_eval(content, functions=functions)
+            em.add_field(
+                name='Result: ',
+                value=f'```\n{result}\n```'
+            )
+
+        except ZeroDivisionError:
+            em.add_field(
+                name='Wow...you make me question my existance',
+                value='```yaml\nImagine you have zero cookies and you split them amongst 0 friends, '
+                      'how many cookies does each friend get? See, it doesn\'t make sense and Cookie Monster '
+                      'is sad that there are no cookies, and you are sad that you have no friends.```'
+            )
+        except Exception:
+            return
+        try:
+            ctx = await self.bot.get_context(message)
+            view = utils.QuitButton(ctx, label='Delete')
+            view.message = await message.reply(embed=em, view=view)
+        except disnake.HTTPException:
+            return
 
     @commands.Cog.listener('on_message')
     async def server_boosts(self, message: disnake.Message):

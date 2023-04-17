@@ -9,7 +9,7 @@ instance = Instance(database3)
 
 @instance.register
 class Rules(Document, GetDoc):
-    id = IntField(attribute='_id', default=1078096710485672017)
+    id = IntField(attribute='_id', default=745298049567424623)
     rules = ListField(StrField(), required=True)
 
     class Meta:

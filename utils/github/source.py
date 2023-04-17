@@ -44,7 +44,7 @@ class GithubSource:
 
         data = ReturnData()
         if cmd is None:
-            embed = disnake.Embed(title="Ukiyo's GitHub Repository")
+            embed = disnake.Embed(title="Astemia's GitHub Repository")
             embed.add_field(name="Repository", value=f"[View on GitHub]({self.BOT_REPO_URL})")
             embed.set_thumbnail(url=self.bot_avatar)
             data.embed = embed
@@ -85,7 +85,7 @@ class GithubSource:
 
         lines = '\n'.join(lines)
 
-        embed = disnake.Embed(title="Ukiyo's Source Link", description=f"{url}")
+        embed = disnake.Embed(title="Astemia's Source Link", description=f"{url}")
         embed.add_field(
             name="Source Code Snippet", value=f"```python\n{lines}\n```"
         )

@@ -21,7 +21,7 @@ class GroupHelpPageSource(menus.ListPageSource):
         self.description = ', '.join(self.group.aliases) if aliases else self.group.description
 
     async def format_page(self, menu, commands):
-        embed = disnake.Embed(title=self.title, description=self.description, color=utils.red)
+        embed = disnake.Embed(title=self.title, description=self.description, color=utils.blurple)
 
         for command in commands:
             if command.signature:
@@ -127,7 +127,7 @@ class FrontPageSource(menus.PageSource):
         return self
 
     def format_page(self, menu: HelpMenu, page):
-        embed = disnake.Embed(title='Bot Help', color=utils.red)
+        embed = disnake.Embed(title='Bot Help', color=utils.blurple)
         embed.set_footer(text=f'TIP: You can also use "{"!" if menu.ctx.clean_prefix == "?" else "?"}" as prefix')
         embed.description = inspect.cleandoc(
             f"""
@@ -135,7 +135,8 @@ class FrontPageSource(menus.PageSource):
             Use "{menu.ctx.clean_prefix}help <command>" for more info on a command.
             Use "{menu.ctx.clean_prefix}help <category>" for more info on a category.
             Use the dropdown menu below to select a category.
-            **NOTE:** Some commands may only work in <#1078234687153131554>
+
+            **NOTE:** Some commands may only work in <#1097610036026548293>
         """
         )
 
@@ -249,7 +250,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
                     )
 
         # No pagination necessary for a single command.
-        embed = disnake.Embed(color=utils.red)
+        embed = disnake.Embed(color=utils.blurple)
         self.common_command_formatting(embed, command)
         await self.context.send(embed=embed, reference=self.context.replied_reference)
 

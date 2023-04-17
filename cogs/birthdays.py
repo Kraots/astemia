@@ -1,0 +1,241 @@
+import pytz
+from datetime import datetime
+from asyncio import TimeoutError
+from dateutil.relativedelta import relativedelta
+
+import disnake
+from disnake.ext import commands, tasks
+
+import utils
+from utils import Context, Birthday, Channels, StaffRoles
+
+from main import Astemia
+
+
+class Birthdays(commands.Cog):
+    """Birthday related commands."""
+
+    def __init__(self, bot: Astemia):
+        self.bot = bot
+        self.check_birthday.start()
+
+    @property
+    def display_emoji(self) -> str:
+        return '🍰'
+
+    @tasks.loop(seconds=30.0)
+    async def check_birthday(self):
+        datas: list[Birthday] = await self.bot.db.find_sorted('bday', 'next_birthday', 1)
+        now = datetime.now()
+        for data in datas[:15]:
+            if now >= data.next_birthday:
+                data.next_birthday += relativedelta(years=1)
+                await data.commit()
+
+                guild = self.bot.get_guild(1097610034701144144)
+                channel = guild.get_channel(Channels.birthdays)
+                mem = guild.get_member(data.id)
+                _now = datetime.now() + relativedelta(days=3)  # Use this as source so it doesn't fail to say the right age for the people in UTC- timezones.
+                now = datetime.now()
+                birthday_timezone = pytz.timezone(data.timezone.replace(' ', '_'))
+                offset = birthday_timezone.utcoffset(now)
+                seconds = offset.total_seconds()
+                next_birthday = data.next_birthday + relativedelta(seconds=seconds)
+                next_birthday = next_birthday.strftime('%d %B %Y')
+                age = utils.human_timedelta(data.birthday_date, source=_now, accuracy=1, suffix=False) \
+                    .replace(' years', '') \
+                    .replace(' year', '') \
+                    .replace(' ', '')
+
+                if age == '20':
+                    if mem.id != self.bot._owner_id:
+                        if any(r for r in StaffRoles.all if r in (role.id for role in mem.roles)) is False:
+                            entry: utils.Constants = await utils.Constants.get()
+                            if mem.id not in entry.ogs:
+                                await utils.try_dm(
+                                    mem,
+                                    'Hello! Happy birthday for turning 20 years of age, but sadly, that also means you no longer meet '
+                                    'the age requirements of `Astemia`, therefore, you have been banned (people can\'t age backwards yk).\n'
+                                    'Apologies for the inconvenience, and once again, happy birthday. :tada: :tada:'
+                                )
+                                await self.bot.db.delete('bday', {'_id': mem.id})
+                                return await mem.kick(reason='User birthday and turned 20y/o+')
+
+                em = disnake.Embed(title=f'Happy {age}th birthday {mem.display_name}!!! :tada: :tada:', color=mem.color)
+                em.set_image(url='https://cdn.discordapp.com/attachments/938411306762002456/938443264703463514/happy_bday.gif')
+                em.set_footer(text=f'Your next birthday is on {next_birthday}')
+
+                msg = await channel.send(mem.mention, embed=em)
+                await msg.add_reaction('🍰')
+
+    @check_birthday.before_loop
+    async def before_loop(self):
+        await self.bot.wait_until_ready()
+
+    @commands.group(name='birthday', aliases=('bday', 'b-day',), invoke_without_command=True, case_insensitive=True)
+    async def base_birthday(self, ctx: Context, *, member: disnake.Member = None):
+        """See how much time left there is until the member's birthday, if they set it.
+
+        `member` **->** The member that you wish to set the coins for. Defaults to yourself.
+        """
+
+        member = member or ctx.author
+        data: Birthday = await self.bot.db.get('bday', member.id)
+        if data is None:
+            if member.id == ctx.author.id:
+                return await ctx.reply(f'{ctx.denial} You did not set your birthday.')
+            else:
+                return await ctx.better_reply(f'{ctx.denial} `{utils.format_name(member)}` did not set their birthday.')
+
+        em = disnake.Embed(title=f'`{utils.format_name(member)}`\'s birthday', color=utils.blurple)
+        em.add_field(
+            'Birthday date',
+            data.birthday_date.strftime('%d %B %Y'),
+            inline=False
+        )
+        em.add_field(
+            'Time left until their next birthday',
+            utils.human_timedelta(data.next_birthday, accuracy=6, suffix=False),
+            inline=False
+        )
+        em.add_field(
+            'Timezone',
+            data.timezone,
+            inline=False
+        )
+        em.set_footer(text=f'Requested by: {utils.format_name(ctx.author)}')
+
+        await ctx.better_reply(embed=em)
+
+    @base_birthday.command(name='set')
+    @commands.max_concurrency(1, commands.BucketType.user)
+    async def birthday_set(self, ctx: Context, date: str):
+        """Set your birthday.
+
+        `date` **->** The exact date when you were born. The format in which you set this is **day/month/year**.
+
+        **Example:**
+        `!birthday set 24/08/2005`
+
+        **NOTE:** This command can only be used in <#1097610036026548293>
+        """
+
+        if await ctx.check_channel() is False:
+            return
+
+        data: Birthday = await self.bot.db.get('bday', ctx.author.id)
+        existed = True
+        if data is None:
+            existed = False
+            data = Birthday(id=ctx.author.id)
+
+        try:
+            birthday_date = datetime.strptime(date, '%d/%m/%Y')
+        except ValueError:
+            return await ctx.reply(
+                f'{ctx.denial} The format in which you gave your birthday date does not match the one you\'re supposed to give it in. '
+                'Doing `!help birthday set` will show you the correct format.'
+            )
+        data.birthday_date = birthday_date
+
+        await ctx.reply(
+            'Please send your exact location in order to get your timezone.\n'
+            'The format in which you must send this must be **Continent/City**. (e.g: Europe/London, America/Los Angeles, etc...)'
+        )
+        try:
+            _birthday_timezone: disnake.Message = await self.bot.wait_for(
+                'message',
+                check=lambda m: m.channel.id == ctx.channel.id and m.author.id == ctx.author.id,
+                timeout=45.0
+            )
+        except TimeoutError:
+            return await ctx.reply('Ran out of time.')
+
+        if not _birthday_timezone.content:
+            return await ctx.reply('You didn\'t give a valid timezone.')
+
+        try:
+            birthday_timezone = pytz.timezone(_birthday_timezone.content.replace(' ', '_'))
+        except pytz.UnknownTimeZoneError:
+            return await _birthday_timezone.reply(
+                f'{ctx.denial} That **Continent/City** does not exist. Please pick one that has the exact same timezone as yours.'
+            )
+        data.timezone = birthday_timezone.zone.replace('_', ' ')
+
+        now = datetime.now()
+        offset = birthday_timezone.utcoffset(now)
+        seconds = offset.total_seconds()
+        next_birthday = birthday_date - relativedelta(year=now.year, seconds=seconds)
+        if now > next_birthday:
+            next_birthday += relativedelta(years=1)
+        data.next_birthday = next_birthday
+
+        if existed is False:
+            await self.bot.db.add('bday', data)
+        else:
+            await data.commit()
+        await ctx.reply('Your birthday has been set.')
+
+    @base_birthday.command(name='remove')
+    @commands.max_concurrency(1, commands.BucketType.user)
+    async def birthday_remove(self, ctx: Context):
+        """Remove your birthday, if you have it set.
+
+        **NOTE:** This command can only be used in <#1097610036026548293>
+        """
+
+        if await ctx.check_channel() is False:
+            return
+
+        data: Birthday = await self.bot.db.get('bday', ctx.author.id)
+        if data is None:
+            return await ctx.reply(f'{ctx.denial} You did not set your birthday.')
+
+        view = utils.ConfirmView(ctx)
+        view.message = await ctx.reply('Are you sure you want to remove your birthday?', view=view)
+        await view.wait()
+        if view.response is True:
+            await self.bot.db.delete('bday', {'_id': ctx.author.id})
+            await view.message.edit(content='Successfully removed your birthday.')
+        else:
+            await view.message.edit(content='Did not remove your birthday.')
+
+    @base_birthday.command(name='top', aliases=('upcoming',))
+    async def bday_top(self, ctx: Context):
+        """See top 5 upcoming birthdays.
+
+        **NOTE:** This command can only be used in <#1097610036026548293>
+        """
+
+        if await ctx.check_channel() is False:
+            return
+
+        index = 0
+        em = disnake.Embed(color=disnake.Color.blurple(), title='***Top `5` upcoming birthdays***\n _ _ ')
+
+        datas: list[Birthday] = await self.bot.db.find_sorted('bday', 'next_birthday', 1)
+        for data in datas[:5]:
+            user = ctx.astemia.get_member(data.id)
+            index += 1
+            next_birthday_date = data.birthday_date.strftime('%d %B %Y').replace(
+                str(data.birthday_date.year), str(data.next_birthday.year)
+            )
+            next_birthday = utils.human_timedelta(data.next_birthday, accuracy=3)
+            em.add_field(
+                name=f"`{index}`. _ _ _ _ {user.display_name}",
+                value=f'Birthday in `{next_birthday}` ( **{next_birthday_date}** )',
+                inline=False
+            )
+
+        await ctx.send(embed=em)
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member: disnake.Member):
+        if member.guild.id != 1097610034701144144:
+            return
+
+        await self.bot.db.delete('bday', {'_id': member.id})
+
+
+def setup(bot: Astemia):
+    bot.add_cog(Birthdays(bot))

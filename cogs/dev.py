@@ -10,9 +10,11 @@ import disnake
 from disnake.ext import commands
 
 import utils
-from utils import Context, TextPage, clean_code  #, Constants (the database)
+from utils import Context, TextPage, clean_code, Constants
 
 from main import Astemia
+
+TO_REPLACE = os.getenv('NAMETOREPLACE')
 
 
 class Developer(commands.Cog):
@@ -32,11 +34,13 @@ class Developer(commands.Cog):
     @commands.command(name='eval', aliases=['e'])
     async def _eval(self, ctx: Context, *, code: str):
         """Evaluate code.
+
         `code` **->** The code to evaluate.
+
         **Local Variables**
         \u2800 • ``disnake`` **->** The disnake module.
         \u2800 • ``commands`` **->** The disnake.ext.commands module.
-        \u2800 • ``_bot`` **->** The bot instance. (`Ukiyo`)
+        \u2800 • ``_bot`` **->** The bot instance. (`Astemia`)
         \u2800 • ``_ctx`` **->** The ``Context`` object of the command.
         \u2800 • ``_channel`` **->** The ``disnake.abc.GuildChannel`` the command is invoked in.
         \u2800 • ``_author`` **->** The ``disnake.Member`` of the command.
@@ -70,7 +74,7 @@ class Developer(commands.Cog):
                 obj = await local_variables["func"]()
                 result = f"{stdout.getvalue()}\n-- {obj}\n"
         except Exception as e:
-            result = ("".join(format_exception(e, e, e.__traceback__)))
+            result = ("".join(format_exception(e, e, e.__traceback__))).replace(TO_REPLACE, "Kraots")
 
         end = time.perf_counter()
         took = f"{end-start:.3f}"
@@ -117,6 +121,7 @@ class Developer(commands.Cog):
     @commands.command(name='toggle')
     async def toggle_cmd(self, ctx: Context, *, command: str):
         """Toggle a command on and off.
+
         `command` **->** The command to disable.
         """
 
@@ -142,6 +147,7 @@ class Developer(commands.Cog):
     @commands.command(name='history', aliases=('dmhistory',))
     async def dm_history(self, ctx: Context, member: disnake.Member, limit: int = 100):
         """Check the bot's dms with a member.
+
         `member` **->** The member to check the dms for.
         `limit` **->** The limit of how many messages to look up for. Defaults to 100.
         """
@@ -170,9 +176,30 @@ class Developer(commands.Cog):
         em = disnake.Embed(color=utils.blurple, title=title, description=f'```yaml\n{entries}\n```')
         view.message = await ctx.send(embed=em, view=view)
 
+    @commands.Cog.listener()
+    async def on_socket_event_type(self, event_type: str):
+        self.bot.socket_events[event_type] += 1
+
+    @commands.command()
+    async def gateway(self, ctx: Context) -> None:
+        """Sends current stats from the gateway."""
+        em = disnake.Embed(title='Gateway Events', color=utils.blurple)
+
+        total_events = sum(self.bot.socket_events.values())
+        events_per_second = total_events / (datetime.datetime.utcnow() - self.bot.uptime).total_seconds()
+
+        em.description = f'Start time: {utils.format_relative(self.bot.uptime)}\n'
+        em.description += f'Events per second: `{events_per_second:.2f}`/s\n\u200b'
+
+        for event_type, count in self.bot.socket_events.most_common(25):
+            em.add_field(name=event_type, value=f'{count:,}')
+
+        await ctx.reply(embed=em)
+
     @commands.command(aliases=('accountage',))
     async def accage(self, ctx: Context, days: int = None):
         """Set the minimum account age one must be in order to be allowed in the server.
+
         `days` **->** The minimum amount of days the user's account's age must be. If not given it will show the current minimum amount of days set.
         """
 
@@ -193,7 +220,8 @@ class Developer(commands.Cog):
     @commands.command(name='bot-invite', aliases=('botinv', 'botinvite', 'binv', 'binvite'))
     async def _bot_invite(self, ctx: Context, bot_id: int = None):
         """Sends the link to add the bot to a server (with all permissions enabled).
-        `bot_id` **->** The id of the bot you want the invite for, defaults to ukiyo.
+
+        `bot_id` **->** The id of the bot you want the invite for, defaults to astemia.
         """
 
         if bot_id is None:
@@ -204,6 +232,17 @@ class Developer(commands.Cog):
             return await ctx.reply('Could not find a bot with that id.')
 
         await ctx.reply(f'Invite for `{bot}`: https://discord.com/oauth2/authorize?client_id={bot_id}&scope=bot&permissions=543246773503')
+
+    @commands.Cog.listener('on_button_click')
+    async def check_for_trash_delete(self, inter: disnake.MessageInteraction):
+        if inter.component.custom_id == 'trash-button-delete':
+            try:
+                await inter.response.defer()
+            except disnake.HTTPException:
+                pass
+            if inter.author.id == self.bot._owner_id or \
+                    any(r.id in utils.StaffRoles.all for r in inter.author.roles):
+                await utils.try_delete(inter.message)
 
 
 def setup(bot: Astemia):

@@ -59,7 +59,9 @@ class TabularData:
 
     def render(self):
         """Renders a table in rST format.
+
         Example:
+
         +-------+-----+
         | Name  | Age |
         +-------+-----+
@@ -92,11 +94,17 @@ def format_dt(dt, style=None):
     Styles
     -------
         `t => 22:57`
+
         `T => 22:57:58`
+
         `d => 17/05/2016`
+
         `D => 17 May 2016`
+
         `f (default) => 17 May 2016 22:57`
+
         `F => Tuesday, 17 May 2016 22:57`
+
         `R => 5 years ago`
     """
 
@@ -106,4 +114,3 @@ def format_dt(dt, style=None):
     if style is None:
         return f'<t:{int(dt.timestamp())}>'
     return f'<t:{int(dt.timestamp())}:{style}>'
-

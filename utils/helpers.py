@@ -70,12 +70,15 @@ def clean_code(content):
 
 def remove_zalgos(string: str, *, remove_whitespace: bool = False) -> str:
     """Return a string with every zalgo character removed.
+
     Parameters
     ----------
         string: :class:`str`
             The string to remove zalgo from.
+
         remove_whitespace: :class:`bool`
             Whether to also remove any whitespace/newline character or not.
+
     Return
     ------
         The new string with the removed zalgos.
@@ -99,15 +102,19 @@ def check_profanity(string: str, *, bad_words: list, lazy: bool = True) -> bool:
     """
     If the return type is of bool ``True`` then it means that the
     string contains a bad word, otherwise ``False`` if it's safe.
+
     Parameters
     ----------
         string: :class:`str`
             The string to check if it contains a bad word.
+
         bad_words: :class:`list`
             A list of the bad words to check for.
+
         lazy: :class:`bool`
             If ``False``, this will return the word that triggered the filter along with the bool and the changed sentence
             in a tuple. If ``True`` it will only return the bool if the filter was triggered or not. Defaults to ``True``.
+
     Return
     ------
         True | False | tuple[bool, str]
@@ -170,15 +177,19 @@ def check_string(string: str, *, limit: str = 4, ignore_whitespace: bool = False
     If the return type of bool is ``True`` then it means that the word has
     less allowed characters in a row than the limit, otherwise ``False``
     if the string meets the required limit.
+
     Parameters
     ----------
         string: :class:`str`
             The string to check if it has enough allowed characters in a row.
+
         limit: :class:`int`
             The limit for which to check the lenght of the allowed letters in a row within the string.
             Defaults to 4.
+
         ignore_whitespace: :class:`bool`
             Whether to ignore any whitespace characters or not.
+
     Return
     ------
         True | False
@@ -204,6 +215,7 @@ async def check_username(bot, member: disnake.Member, *, bad_words: list):
     """
     Check the ``member``'s display name, if all the checks pass,
     he's ignored, otherwise, his nickname gets changed.
+
     Parameters
     ----------
         member: :class:`disnake.Member`
@@ -227,7 +239,7 @@ async def check_username(bot, member: disnake.Member, *, bad_words: list):
         return await member.send(
             'Your name has too few pingable letters in a row, '
             f'is a bad word or is too short (minimum is **4**) so I changed it to `{new_nick}`\n'
-            'You can always change your nickname by using the command `!nick new_nick` in <#1078234687153131554>'
+            'You can always change your nickname by using the command `!nick new_nick` in <#1097610036026548293>'
         )
     except disnake.Forbidden:
         return
@@ -315,10 +327,12 @@ def format_amount(num: str) -> str:
 
 def escape_markdown(text: str) -> str:
     r"""Escapes the markdown from the text. That means **hello** becomes \\*\\*hello\\*\\*
+
     Parameters
     ----------
         text: :class:`str`
             The text to escape the markdown from.
+
     Return
     ------
         :class:`str`
@@ -330,10 +344,12 @@ def escape_markdown(text: str) -> str:
 
 def remove_markdown(text: str) -> str:
     r"""Removes the markdown from the text. That means **hello** becomes hello
+
     Parameters
     ----------
         text: :class:`str`
             The text to remove the markdown from.
+
     Return
     ------
         :class:`str`
@@ -378,25 +394,32 @@ async def try_delete(
     delay: float | int = None
 ):
     """|coro|
+
     A helper function that tries to delete a :class:`disnake.Message` object
     while silencing the errors that it may raise.
+
     Parameters
     ----------
         message: Optional[:class:`disnake.Message` | list[:class:`disnake.Message`] |
         tuple[:class:`disnake.Message`] | set[:class:`disnake.Message`]]
             The message to try and delete, can also be a list of message objects.
             If `channel` and `message_id` is not given, this is required.
+
         channel: Optional[:class:`disnake.TextChannel` | :class:`disnake.Thread`]
             The channel from which to fetch the message object. If this is given, `message_id` becomes required.
             This gets ignored if `message` is not ``None``.
+
         message_id: Optional[:class:`int` | list[:class:`int`] | tuple[:class:`int`] | set[:class:`int`]]
             The message id for the message object to fetch, can also be a list of message ids.
             If this is given, `channel` becomes required. This gets ignored if `message` is not ``None``.
+
         delay: Optional[:class:`float` | :class:`int`]
             The time to wait in the background before deleting the message.
+
     Raises
     ------
         :class:`TypeError` if the type of an argument or key-word argument isn't any of the required ones.
+
     Return
     -------
         ``None``
@@ -490,7 +513,9 @@ async def try_dm(
     **kwargs
 ):
     """|coro|
+
     Try to dm a user or multiple users the same message while silencing whatever error it may raise.
+
     Parameters
     ----------
         user: :class:`disnake.Member` | :class:`disnake.User` |
@@ -498,11 +523,14 @@ async def try_dm(
         tuple[:class:`disnake.Member` | :class:`disnake.User`] |
         set[:class:`disnake.Member` | :class:`disnake.User`]
             The user(s) to dm.
+
         *args: The args of every ``.send`` method.
         **kwargs: The kwargs of every ``.send`` method.
+
     Raises
     ------
         :class:`TypeError` if the user isn't a Member or a User object, or a list, tuple or set of those two.
+
     Return
     ------
         ``None``
@@ -546,14 +574,17 @@ async def send_embeds(
 ):
     """
     Safe sends the embeds to the destination.
+
     Parameters
     ----------
         destination: :class:`disnake.TextChannel` | :class:`disnake.Webhook`
         :class:`disnake.Thread` | :class:`disnake.User` | :class:`disnake.Member`
             The destination where to send the embeds to.
+
         embeds: list[:class:`disnake.Embed`] | tuple[:class:`disnake.Embed`]
         | set[:class:`disnake.Embed`]
             The embeds to send.
+
     Return
     ------
         ``None``
@@ -598,10 +629,12 @@ async def send_embeds(
 
 def format_position(n: int | str) -> str:
     """Adds st|nd|th correspondingly.
+
     Parameters
     ----------
         n: :class:`int` | :class:`str`
             The number to format.
+
     Return
     ------
         :class:`str`

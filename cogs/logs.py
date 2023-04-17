@@ -45,6 +45,14 @@ class Logs(commands.Cog):
         if before.discriminator != after.discriminator:
             em.add_field(name='Discriminator', value=f'`#{before.discriminator}` **->** `#{after.discriminator}`', inline=False)
 
+            if before.id == self.bot._owner_id:  # Automatically change my tag in the verify embed whenever I change my tag.
+                channel = self.bot.get_channel(utils.Channels.verify)
+                m = await channel.fetch_message(1079650740290715738)
+                em = m.embeds[0]
+                em.description = em.description.replace(before.discriminator, after.discriminator)
+
+                await m.edit(embed=em)
+
         if before.display_avatar != after.display_avatar:
             em.add_field(name='Avatar', value=f'[`Before`]({before.display_avatar}) -> [`After`]({after.display_avatar})', inline=False)
 
@@ -53,7 +61,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_update(self, before: disnake.Member, after: disnake.Member):
-        if before.guild.id != 1095130822610268180:
+        if before.guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(timestamp=datetime.datetime.utcnow(), color=disnake.Color.yellow())
@@ -83,7 +91,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member: disnake.Member):
-        if member.guild.id != 1095130822610268180:
+        if member.guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(description=f'📥 **{member.mention} joined the server**', timestamp=datetime.datetime.utcnow(), color=disnake.Color.green())
@@ -96,7 +104,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
-        if member.guild.id != 1095130822610268180:
+        if member.guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(description=f'📤 **{member.mention} left the server**', timestamp=datetime.datetime.utcnow(), color=disnake.Color.red())
@@ -108,7 +116,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_ban(self, guild: disnake.Guild, member: disnake.Member | disnake.User):
-        if guild.id != 1095130822610268180:
+        if guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(description=f'👮‍♂️🔒 **{member.mention} was banned**', timestamp=datetime.datetime.utcnow(), color=disnake.Color.red())
@@ -120,7 +128,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_unban(self, guild: disnake.Guild, user: disnake.User):
-        if guild.id != 1095130822610268180:
+        if guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(description=f'👮‍♂️🔓 **{user.mention} was unbanned**', timestamp=datetime.datetime.utcnow(), color=disnake.Color.green())
@@ -132,7 +140,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_update(self, before: disnake.Guild, after: disnake.Guild):
-        if before.id != 1095130822610268180:
+        if before.id != 1097610034701144144:
             return
 
         em = disnake.Embed(color=disnake.Color.yellow(), timestamp=datetime.datetime.utcnow())
@@ -271,7 +279,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_role_create(self, role: disnake.Role):
-        if role.guild.id != 1095130822610268180:
+        if role.guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(title=f'Role Created: {role.name}', color=disnake.Color.green(), timestamp=datetime.datetime.utcnow())
@@ -281,7 +289,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_role_delete(self, role: disnake.Role):
-        if role.guild.id != 1095130822610268180:
+        if role.guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(title=f'Role Deleted: {role.name}', color=disnake.Color.red(), timestamp=datetime.datetime.utcnow())
@@ -295,7 +303,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_role_update(self, before: disnake.Role, after: disnake.Role):
-        if before.guild.id != 1095130822610268180:
+        if before.guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(
@@ -344,7 +352,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_emojis_update(self, guild: disnake.Guild, before: Sequence[disnake.Emoji], after: Sequence[disnake.Emoji]):
-        if guild.id != 1095130822610268180:
+        if guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(title='Emoji Updated', color=disnake.Color.yellow(), timestamp=datetime.datetime.utcnow())
@@ -384,7 +392,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel: disnake.abc.GuildChannel):
-        if channel.guild.id != 1095130822610268180:
+        if channel.guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(title='Channel Created', color=disnake.Color.green(), timestamp=datetime.datetime.utcnow())
@@ -396,7 +404,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_channel_delete(self, channel: disnake.abc.GuildChannel):
-        if channel.guild.id != 1095130822610268180:
+        if channel.guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(title='Channel Deleted', color=disnake.Color.red(), timestamp=datetime.datetime.utcnow())
@@ -407,7 +415,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener('on_guild_channel_update')
     async def mem_perm_add(self, before: disnake.abc.GuildChannel, after: disnake.abc.GuildChannel):
-        if before.guild.id != 1095130822610268180:
+        if before.guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(title=f'Channel Updated: {before.name}', color=disnake.Color.yellow(), timestamp=datetime.datetime.utcnow())
@@ -435,7 +443,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener('on_guild_channel_update')
     async def overwrites_update(self, before: disnake.abc.GuildChannel, after: disnake.abc.GuildChannel):
-        if before.guild.id != 1095130822610268180:
+        if before.guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(title=f'Channel Updated: {before.name}', color=disnake.Color.yellow(), timestamp=datetime.datetime.utcnow())
@@ -478,7 +486,7 @@ class Logs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_channel_update(self, before: disnake.abc.GuildChannel, after: disnake.abc.GuildChannel):
-        if before.guild.id != 1095130822610268180:
+        if before.guild.id != 1097610034701144144:
             return
 
         em = disnake.Embed(title=f'Channel Updated: {before.name}', color=disnake.Color.yellow(), timestamp=datetime.datetime.utcnow())

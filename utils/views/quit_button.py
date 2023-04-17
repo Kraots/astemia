@@ -54,4 +54,3 @@ class QuitButton(disnake.ui.View):
             to_delete.append(self.ctx.message)
         await utils.try_delete(to_delete)
         self.stop()
-
