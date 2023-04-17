@@ -39,8 +39,7 @@ class Moderation(commands.Cog):
             Channels.staff_chat, Channels.logs, Channels.messages_logs, Channels.moderation_logs,
             Channels.github, Channels.bot_commands, Channels.verify,
             Channels.recommendations, Channels.polls, Channels.activity_reports,
-            Channels.tickets, Channels.discord_news, Channels.discord_safety,
-            Channels.confessions
+            Channels.tickets, Channels.discord_news, Channels.discord_safety
         )
 
         self.check_mutes.start()
