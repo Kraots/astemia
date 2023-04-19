@@ -249,10 +249,10 @@ class Misc(commands.Cog):
 
         rules: Rules = await self.bot.db.get('rules')
         if rules is None:
-            await Rules(
+            await _bot.db.add('rules', Rules(
                 id=self.bot._owner_id,
                 rules=[rule]
-            ).commit()
+            ))
         else:
             rules.rules += [rule]
             await rules.commit()
