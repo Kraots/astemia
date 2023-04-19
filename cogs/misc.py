@@ -32,17 +32,19 @@ from jishaku.shell import ShellReader
 from main import Astemia
 
 SERVER_AD = """
-☞ Astemia ☜
-✯ Looking for a friendship or a place to just chill? This is the perfect server!! ✯
+Say Hello To Astemia 
+-----------------------------------
+Do You Happen To Be Lost?, Are You Looking For Something New And Interesting? Well Check Out This Server<3 
 
-⇨ This server:
-➢ Amazing owner, admins and mods ☺︎
-➢ Exclusive bot ☻︎
-➢ Roles and intros ☺︎
-➢ Possible friendships ☻︎
-➢ An active and fun server ☺︎
-➢ Exclusive emotes ☻︎
-➢ And over all an inclusive server for everyone ☺︎
+We have: 
+
+Friendly Owners, Admins And Mods 
+❁A Unique And Custom Bot
+❁ Cool Roles And Organized Introductions
+❁ Amazing People And Friends
+❁ A Fun Exciting Server
+❁ Emojis For Everyone
+❁ And An Accepting And Loving Community, Where You Can Feel Comfortable And Be Yourself
 
 
 ☀︎ Link: https://discord.gg/ewZ7hQbJhj ☀︎
