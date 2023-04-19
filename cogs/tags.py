@@ -266,7 +266,7 @@ class _Tags(commands.Cog, name='Tags'):
         if xp < 0:
             lvl = lvl - 1
 
-        if lvl < 30:
+        if lvl < 30 and inter.author.id != self.bot._owner_id:
             return await inter.send(
                 'You need to be level 30 or above in order '
                 'to create tags.',
