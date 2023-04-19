@@ -45,7 +45,7 @@ SERVER_AD = """
 ➢ And over all an inclusive server for everyone ☺︎
 
 
-☀︎ Link: https://discord.gg/FNv8HnvEyr ☀︎
+☀︎ Link: https://discord.gg/ewZ7hQbJhj ☀︎
 """
 
 functions = {
@@ -179,7 +179,7 @@ class Misc(commands.Cog):
         if await ctx.check_channel() is False:
             return
 
-        await ctx.better_reply('https://discord.gg/FNv8HnvEyr')
+        await ctx.better_reply('https://discord.gg/ewZ7hQbJhj')
 
     @commands.command(aliases=('ad',))
     async def serverad(self, ctx: Context):
