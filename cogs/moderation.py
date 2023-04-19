@@ -624,7 +624,7 @@ class Moderation(commands.Cog):
     async def unmute_cmd(self, ctx: Context, *, member: disnake.Member):
         """Unmute somebody that is currently muted.
 
-        `member` **->** The member you want to unmute. If the member was muted by carrot then you can't do shit about it <:lipbite:1078238137832190002> <:kek:1078238127501615156>
+        `member` **->** The member you want to unmute. If the member was muted by carrot then you can't do shit about it <:lipbite:1097656674912829460> <:kek:1097656660241166356>
         """  # noqa
 
         await self.apply_unmute_or_unblock(
@@ -665,7 +665,7 @@ class Moderation(commands.Cog):
     async def unblock_cmd(self, ctx: Context, *, member: disnake.Member):
         """Unblock somebody that is currently blocked.
 
-        `member` **->** The member you want to unblock. If the member was blocked by carrot then you can't do shit about it <:lipbite:1078238137832190002> <:kek:1078238127501615156>
+        `member` **->** The member you want to unblock. If the member was blocked by carrot then you can't do shit about it <:lipbite:1097656674912829460> <:kek:1097656660241166356>
         """  # noqa
 
         await self.apply_unmute_or_unblock(

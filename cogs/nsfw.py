@@ -11,7 +11,7 @@ from main import Astemia
 
 class Nsfw(commands.Cog):
     """Nsfw commands."""
-    LIP_BITE = '<:lipbite:1078238137832190002>'
+    LIP_BITE = '<:lipbite:1097656674912829460>'
 
     def __init__(self, bot: Astemia):
         self.bot = bot
