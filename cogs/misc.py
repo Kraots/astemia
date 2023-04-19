@@ -409,7 +409,7 @@ class Misc(commands.Cog):
             return
 
         created_date = ctx.astemia.created_at
-        publiced_date = ctx.astemia.get_member(848964069771575336).joined_at
+        publiced_date = ctx.astemia.get_member(302050872383242240).joined_at
         members = [m for m in ctx.astemia.members if not m.bot]
         em = disnake.Embed(colour=utils.red, title='Server Creation')
         em.add_field(
