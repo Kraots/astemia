@@ -55,12 +55,6 @@ class Marriages(commands.Cog):
         view.message = msg = await ctx.send(f'{member.mention} do you want to marry {ctx.author.mention}?', view=view)
         await view.wait()
         if view.response is True:
-            taken = ctx.astemia.get_role(1097610034701144148)
-            new_roles1 = [r for r in ctx.author.roles if not r.id == 1097610034701144149] + [taken]
-            await ctx.author.edit(roles=new_roles1)
-            new_roles2 = [r for r in member.roles if not r.id == 1097610034701144149] + [taken]
-            await member.edit(roles=new_roles2)
-
             now = datetime.utcnow()
 
             if data1 is None:
@@ -119,12 +113,6 @@ class Marriages(commands.Cog):
             view.message = msg = await ctx.reply(f'Are you sure you want to divorce {usr.mention}?', view=view)
             await view.wait()
             if view.response is True:
-                single = ctx.astemia.get_role(1097610034701144149)
-                new_roles1 = [r for r in ctx.author.roles if not r.id == 1097610034701144148] + [single]
-                await ctx.author.edit(roles=new_roles1)
-                new_roles2 = [r for r in usr.roles if not r.id == 1097610034701144148] + [single]
-                await usr.edit(roles=new_roles2)
-
                 mem: Marriage = await self.bot.db.get('marriage', usr.id)
                 await self.bot.db.delete('marriages', {'_id': data.pk})
                 await self.bot.db.delete('marriages', {'_id': mem.pk})
