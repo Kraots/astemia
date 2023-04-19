@@ -263,6 +263,13 @@ class OnMessage(commands.Cog):
                 await m.add_reaction('<a:nitro_boost:939677120454610964>')
                 await m.add_reaction('<:blob_love:1098302008596902028>')
 
+    @commands.Cog.listener('on_message')
+    async def check_for_voice_message(self, message: disnake.Message):
+        if message.guild.id == 1097610034701144144:
+            for attachment in message.attachments:
+                if attachment.url.endswith('.ogg') or 'voice-message' in attachment.url:
+                    return await message.delete()
+
 
 def setup(bot: Astemia):
     bot.add_cog(OnMessage(bot))
