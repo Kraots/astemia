@@ -32,22 +32,22 @@ from jishaku.shell import ShellReader
 from main import Astemia
 
 SERVER_AD = """
-Say Hello To Astemia 
+𓆱𓇟.ꜱᴀʏ ʜᴇʟʟᴏ ᴛᴏ ᴀꜱᴛᴇᴍɪᴀ.𓇟𓆱
 -----------------------------------
-Do You Happen To Be Lost?, Are You Looking For Something New And Interesting? Well Check Out This Server<3 
+ᴅᴏ ʏᴏᴜ ʜᴀᴘᴘᴇɴ ᴛᴏ ʙᴇ ʟᴏꜱᴛ?, ᴀʀᴇ ʏᴏᴜ ʟᴏᴏᴋɪɴɢ ꜰᴏʀ ꜱᴏᴍᴇᴛʜɪɴɢ ɴᴇᴡ ᴀɴᴅ ɪɴᴛᴇʀᴇꜱᴛɪɴɢ? ᴡᴇʟʟ ᴄʜᴇᴄᴋ ᴏᴜᴛ ᴛʜɪꜱ ꜱᴇʀᴠᴇʀ<3 
 
-We have: 
+ᴡᴇ ʜᴀᴠᴇ: 
 
-Friendly Owners, Admins And Mods 
-❁A Unique And Custom Bot
-❁ Cool Roles And Organized Introductions
-❁ Amazing People And Friends
-❁ A Fun Exciting Server
-❁ Emojis For Everyone
-❁ And An Accepting And Loving Community, Where You Can Feel Comfortable And Be Yourself
+❁•ꜰʀɪᴇɴᴅʟʏ ᴏᴡɴᴇʀꜱ, ᴀᴅᴍɪɴꜱ ᴀɴᴅ ᴍᴏᴅꜱ 
+❁•ᴀ ᴜɴɪqᴜᴇ ᴀɴᴅ ᴄᴜꜱᴛᴏᴍ ʙᴏᴛ
+❁•ᴄᴏᴏʟ ʀᴏʟᴇꜱ ᴀɴᴅ ᴏʀɢᴀɴɪᴢᴇᴅ ɪɴᴛʀᴏᴅᴜᴄᴛɪᴏɴꜱ
+❁•ᴀᴍᴀᴢɪɴɢ ᴘᴇᴏᴘʟᴇ ᴀɴᴅ ꜰʀɪᴇɴᴅꜱ
+❁•ᴀ ꜰᴜɴ ᴇxᴄɪᴛɪɴɢ ꜱᴇʀᴠᴇʀ
+❁•ᴇᴍᴏᴊɪꜱ ꜰᴏʀ ᴇᴠᴇʀʏᴏɴᴇ
+❁•ᴀɴᴅ ᴀɴ ᴀᴄᴄᴇᴘᴛɪɴɢ ᴀɴᴅ ʟᴏᴠɪɴɢ ᴄᴏᴍᴍᴜɴɪᴛʏ, ᴡʜᴇʀᴇ ʏᴏᴜ ᴄᴀɴ ꜰᴇᴇʟ ᴄᴏᴍꜰᴏʀᴛᴀʙʟᴇ ᴀɴᴅ ʙᴇ ʏᴏᴜʀꜱᴇʟꜰ
 
 
-☀︎ Link: https://discord.gg/ewZ7hQbJhj ☀︎
+꧁•❁ ʟɪɴᴋ: https://discord.gg/ewZ7hQbJhj ꧂
 """
 
 functions = {
