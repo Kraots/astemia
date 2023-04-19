@@ -261,7 +261,7 @@ class OnMessage(commands.Cog):
 
                 m = await message.channel.send(message.author.mention, embed=em)
                 await m.add_reaction('<a:nitro_boost:939677120454610964>')
-                await m.add_reaction('<:blob_love:1078238162901536810>')
+                await m.add_reaction('<:blob_love:1098302008596902028>')
 
 
 def setup(bot: Astemia):
