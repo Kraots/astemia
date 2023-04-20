@@ -16,9 +16,15 @@ class Tasks(commands.Cog):
     def __init__(self, bot: Astemia):
         self.bot = bot
 
+        self.servers = [
+            1098669760406896813, 1098669783945314364, 1098669730350497823,
+            1098668833918697534
+        ]
+
         #  self.send_random_question.start()
         self.check_polls.start()
         self.check_for_stats_reset.start()
+        self.notify_bump.start()
 
     @tasks.loop(hours=3)
     async def send_random_question(self):
@@ -244,6 +250,27 @@ class Tasks(commands.Cog):
 
     @check_for_stats_reset.before_loop
     async def wait_for_ready_stats_reset(self):
+        await self.bot.wait_until_ready()
+
+    @tasks.loop(seconds=2100.0)
+    async def notify_bump(self):
+        server = self.servers[0]
+        self.servers.append(server)
+        self.servers = self.servers[1:]
+
+        guild = self.bot.get_guild(server)
+        channel = disnake.utils.find(lambda c: c.name == 'bump', guild.channels)
+        if channel:
+            await channel.send(
+                f'{guild.default_role.mention}\n\n It\'s your turn to bump!\n\n'
+                '*If you didn\'t bump within* ***10 minutes*** *from receiving this message, '
+                'then wait for the next message '
+                'so that you don\'t interfere with the other\'s turns to bump.*',
+                allowed_mentions=disnake.AllowedMentions(everyone=True)
+            )
+
+    @notify_bump.before_loop
+    async def wait_for_ready_bump(self):
         await self.bot.wait_until_ready()
 
 
