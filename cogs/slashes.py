@@ -247,7 +247,7 @@ class SlashCommands(commands.Cog):
             The maximum number of choices
         """
 
-        if not any([role.id for role in inter.author.roles if role in utils.StaffRoles.all]):
+        if not any([role for role in inter.author.roles if role.id in utils.StaffRoles.all]):
             if inter.author.id != self.bot._owner_id:
                 return await inter.send('Only staff members can use this command.', ephemeral=True)
 
@@ -309,7 +309,7 @@ class SlashCommands(commands.Cog):
             The title of the poll to close
         """
 
-        if not any([role.id for role in inter.author.roles if role in utils.StaffRoles.all]):
+        if not any([role for role in inter.author.roles if role.id in utils.StaffRoles.all]):
             if inter.author.id != self.bot._owner_id:
                 return await inter.send('Only staff members can use this command.', ephemeral=True)
 

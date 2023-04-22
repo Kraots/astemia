@@ -1606,10 +1606,11 @@ class Moderation(commands.Cog):
 
         normal_members_warned = 0
         for member in members:
-            if member.id == self.bot._owner_id:
-                continue
-            elif ctx.author.top_role <= member.top_role:
-                continue
+            if ctx.author.id != self.bot._owner_id:
+                if member.id == self.bot._owner_id:
+                    continue
+                elif ctx.author.top_role <= member.top_role:
+                    continue
 
             normal_members_warned += 1
 
