@@ -1835,6 +1835,7 @@ class Moderation(commands.Cog):
         """
 
         reference = ctx.message.reference.resolved if ctx.message.reference else None
+        await ctx.message.delete()
 
         message = f"{member.mention} Your selfie/message has been deleted because it " \
                   "violates the rules of this channel. Please check the topic of the " \
