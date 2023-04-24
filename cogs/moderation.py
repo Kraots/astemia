@@ -1761,6 +1761,9 @@ class Moderation(commands.Cog):
         elif entry.warn_count == 0:
             return await ctx.reply(f'{ctx.denial} The user is currently at **0** active warns.')
 
+        if ctx.author.id == member.id and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply(f'{ctx.denial} You cannot remove your own warn dumbass lmao.')
+
         entry.warn_count -= 1
         await entry.commit()
 
